@@ -121,3 +121,127 @@ body {
 .country-hover {
     transition: fill-opacity 0.5s ease, opacity 0.5s ease; /* Плавный переход */
 }
+
+/* Responsive Design*/
+@media (max-width: 1024px) {
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+    }
+
+    #quiz-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 900px;
+        height: auto;
+    }
+
+    #map {
+        width: 100%;
+        height: 500px;
+    }
+
+    #question-container {
+        height: auto;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .question-container__text {
+        font-size: 2rem;
+    }
+
+    #question-container__question,
+    #question-container__counter {
+        font-size: 15px;
+        padding: 8px 15px;
+    }
+
+    .developer {
+        font-size: 12px;
+    }
+}
+
+
+@media (max-width: 767px) {
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    #quiz-container {
+        width: 90%;
+        height: auto;
+        text-align: center;
+    }
+
+    #map {
+        width: 100%;
+        height: 350px;
+    }
+
+    #question-container {
+        width: 100%;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .question-container__text {
+        font-size: 1.8rem;
+    }
+
+    .questions-wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #question-container__question,
+    #question-container__counter {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .developer {
+        font-size: 11px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .question-container__text {
+        font-size: 1.5rem;
+    }
+
+    #map {
+        height: 300px;
+        width: 100%;
+    }
+
+    #question-container {
+        padding: 10px;
+        text-align: center;
+    }
+
+    #question-container__question,
+    #question-container__counter {
+        font-size: 13px;
+        padding: 5px 10px;
+    }
+}
