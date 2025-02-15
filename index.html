@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map Guesser</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
 </head>
 
@@ -17,13 +19,17 @@
         <div id="map"></div>
         <div id="question-container">
             <h1 class="question-container__text">Map Guesser Game</h1>
-            <p id="question-container__question"></p>
-            <button id="question-container__next-question">Next Question</button>
+            <div class="questions-wrapper">
+                <p id="question-container__question"></p>
+                <p id="question-container__counter"></p>
+            </div>
+            <div id="message-container"></div>
             <p class="developer">Developed by Ozodbek</p>
         </div>
     </div>
 
     <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 
 </html>
