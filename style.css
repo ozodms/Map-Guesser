@@ -71,7 +71,7 @@ body {
     height: 230px;
 }
 
-.question-container__text{
+.question-container__text {
     font-size: 2.5rem;
     margin-bottom: 10px;
     font-family: sans-serif;
@@ -92,7 +92,8 @@ body {
     color: #000000;
     background-color: #0077b6;
     color: #ffffff;
-    padding: 10px 20px;;
+    padding: 10px 20px;
+    ;
     display: inline-block;
     border-radius: 7px;
 }
@@ -119,7 +120,8 @@ body {
 }
 
 .country-hover {
-    transition: fill-opacity 0.5s ease, opacity 0.5s ease; /* Плавный переход */
+    transition: fill-opacity 0.5s ease, opacity 0.5s ease;
+    /* Плавный переход */
 }
 
 /* Responsive Design*/
