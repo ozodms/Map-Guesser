@@ -53,7 +53,9 @@ let streakCounter = 0;
 
 
 function getRandomCountry() {
-    const countryNames = geojson.features.map(feature => feature.properties.name);
+    const countryNames = geojson.features.map(function (feature) {
+        return feature.properties.name;
+    });
     let newCountry;
     do {
         newCountry = countryNames[Math.floor(Math.random() * countryNames.length)];
@@ -65,8 +67,7 @@ function getRandomCountry() {
 
 let currentCountry = getRandomCountry();
 questionElement.textContent = currentCountry;
-counterElement.textContent = `Streak: ${streakCounter}`;
-
+counterElement.textContent = 'Streak: ' + streakCounter;
 
 function onCountryClick(e, feature) {
     const clickedCountry = feature.properties.name;
@@ -81,7 +82,7 @@ function onCountryClick(e, feature) {
         streakCounter = 0;
     }
 
-    counterElement.textContent = `Streak: ${streakCounter}`;
+    counterElement.textContent = 'Streak: ' + streakCounter;
 
     currentCountry = getRandomCountry();
     questionElement.textContent = currentCountry;
