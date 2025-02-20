@@ -11,6 +11,13 @@ A geography-based interactive quiz game where players have to correctly identify
 - Custom message display for correct and incorrect guesses
 - Fully responsive layout with adaptive design
 - Optimized map boundaries to keep the focus on playable areas
+- Enhanced wrong answer visualization system showing both incorrect and target countries
+- Comprehensive debugging system for game state tracking and error detection
+- Improved country validation system with duplicate detection
+- Double penalty system for wrong answers to reflect both affected countries
+- Robust error handling for country data and layer management
+- Optimized game state management with proper validation checks
+
 
 
 ## Want to see this project in action? Follow these simple steps!
@@ -49,4 +56,3 @@ I'd love to hear from you! Feel free to:
 Your input helps me grow as a developer and makes this project better.
 Every suggestion counts! 🙌
 Feel free to reach out! 🤝
-  
