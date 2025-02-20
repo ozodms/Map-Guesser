@@ -1,8 +1,9 @@
 import { geojson } from './geojsonmap.js';
 
 var map = L.map('map').setView([0, 0], 2);
+var geoJsonLayer;
 
-const baseLayer = L.tileLayer('https://basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+var baseLayer = L.tileLayer('https://basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO'
 }).addTo(map);
 
@@ -20,70 +21,149 @@ function styleFeature() {
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: function (e) {
-            e.target.setStyle({
-                fillOpacity: 0.5,
-                opacity: 1
-            });
+            if (!answeredCountries.has(feature.properties.name)) {
+                e.target.setStyle({
+                    fillOpacity: 0.5,
+                    opacity: 1
+                });
+            }
         },
         mouseout: function (e) {
-            e.target.setStyle({
-                fillOpacity: 0,
-                opacity: 0
-            });
+            if (!answeredCountries.has(feature.properties.name)) {
+                e.target.setStyle({
+                    fillOpacity: 0,
+                    opacity: 0
+                });
+            }
         },
         click: function (e) {
-            onCountryClick(e, feature);
+            if (!answeredCountries.has(feature.properties.name)) {
+                onCountryClick(e, feature);
+            }
         }
     });
 }
 
+var countryLayers = {};
 
-L.geoJSON(geojson, {
-    style: styleFeature,
-    onEachFeature: onEachFeature
-}).addTo(map);
+function initializeMap() {
+    if (geoJsonLayer) {
+        map.removeLayer(geoJsonLayer);
+    }
 
+    countryLayers = {};
 
-const questionElement = document.getElementById('question-container__question');
-const counterElement = document.getElementById('question-container__counter');
-const messageElement = document.getElementById('message-container');
-
-let lastCountry = null;
-let streakCounter = 0;
-
-
-function getRandomCountry() {
-    const countryNames = geojson.features.map(function (feature) {
-        return feature.properties.name;
-    });
-    let newCountry;
-    do {
-        newCountry = countryNames[Math.floor(Math.random() * countryNames.length)];
-    } while (newCountry === lastCountry);
-    lastCountry = newCountry;
-    return newCountry;
+    geoJsonLayer = L.geoJSON(geojson, {
+        style: styleFeature,
+        onEachFeature: function (feature, layer) {
+            countryLayers[feature.properties.name] = layer;
+            onEachFeature(feature, layer);
+        }
+    }).addTo(map);
 }
 
+var questionElement = document.getElementById('question-container__question');
+var counterElement = document.getElementById('question-container__counter');
+var messageElement = document.getElementById('message-container');
+var resetButton = document.getElementById('reset-button');
 
-let currentCountry = getRandomCountry();
-questionElement.textContent = currentCountry;
-counterElement.textContent = 'Streak: ' + streakCounter;
+var allCountries = [];
+var currentIndex = 0;
+var correctCount = 0;
+var wrongCount = 0;
+var answeredCountries = new Set();
+var currentCountry = null;
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function resetGame() {
+    currentIndex = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    answeredCountries.clear();
+
+    initializeMap();
+
+    allCountries = shuffleArray(geojson.features.map(feature => feature.properties.name)).filter(Boolean);
+
+    currentCountry = getNextCountry();
+
+    updateUI();
+}
+
+function getNextCountry() {
+    while (currentIndex < allCountries.length) {
+        var nextCountry = allCountries[currentIndex++];
+        if (!answeredCountries.has(nextCountry)) {
+            return nextCountry;
+        }
+    }
+    return null;
+}
 
 function onCountryClick(e, feature) {
-    const clickedCountry = feature.properties.name;
+    var clickedCountry = feature.properties.name;
 
-    if (clickedCountry === currentCountry) {
+    if (!clickedCountry || !currentCountry) {
+        return;
+    }
+
+    if (answeredCountries.has(clickedCountry)) {
+        return;
+    }
+
+    var isCorrect = clickedCountry === currentCountry;
+
+    if (isCorrect) {
         messageElement.textContent = "✅ Correct!";
         messageElement.style.color = "green";
-        streakCounter++;
+        correctCount++;
+        e.target.setStyle({
+            fillColor: "green",
+            color: "green",
+            fillOpacity: 0.5,
+            opacity: 1
+        });
     } else {
         messageElement.textContent = "❌ Wrong!";
         messageElement.style.color = "red";
-        streakCounter = 0;
+        wrongCount++;
+
+        e.target.setStyle({
+            fillColor: "red",
+            color: "red",
+            fillOpacity: 0.5,
+            opacity: 1
+        });
+
+        var correctLayer = countryLayers[currentCountry];
+        if (correctLayer) {
+            correctLayer.setStyle({
+                fillColor: "green",
+                color: "green",
+                fillOpacity: 0.5,
+                opacity: 1
+            });
+        }
     }
 
-    counterElement.textContent = 'Streak: ' + streakCounter;
-
-    currentCountry = getRandomCountry();
-    questionElement.textContent = currentCountry;
+    answeredCountries.add(currentCountry);
+    answeredCountries.add(clickedCountry);
+    currentCountry = getNextCountry();
+    updateUI();
 }
+
+function updateUI() {
+    questionElement.textContent = currentCountry || "Game Over!";
+    counterElement.textContent = `Correct: ${correctCount} | Wrong: ${wrongCount} | Total: ${allCountries.length}`;
+}
+
+resetButton.addEventListener("click", resetGame);
+initializeMap();
+resetGame();
